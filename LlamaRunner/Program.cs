@@ -1,0 +1,1 @@
+﻿new LlamaGeneral.Chat(LlamaGeneral.Models.Samantha7B).StartChat();
