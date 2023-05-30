@@ -1,45 +1,28 @@
+using LLama;
+
 namespace LlamaGeneral
 {
     public class Chat
     {
-        private LLama.LLamaModel model;
-        public Chat(LLama.LLamaModel model)
-        {
-            this.model = model;
-        }
+        ChatSession<LLamaModel> session;
 
-        public void StartChat()
+        public Chat(LLamaModel model, string prompt)
         {
-            var session = new LLama.ChatSession<LLama.LLamaModel>(model);
-            var prompt = """
-            You are Samantha, a sentient AI.
-
-            USER: 
-            """;
+            OnTokenReceived += (_) => { };
+            session = new ChatSession<LLamaModel>(model);
             session.WithPrompt(prompt)
             .WithAntiprompt(new string[] { "USER:", "User:", "user:" });
-            
-            while (true)
+        }
+
+        public void SendMessage(string text)
+        {
+            var response = session.Chat(text + "\nASSISTANT:");
+            foreach (var item in response)
             {
-                var input = System.Console.ReadLine();
-                if(input == null) return;
-                if (input == "exit()")
-                {
-                    break;
-                }
-                var first = true;
-                var response = session.Chat(input + "\nASSISTANT:");
-                System.Console.Write("Samantha: ");
-                foreach (var part in response)
-                {
-                    var item = part;
-                    if(first) {
-                        item = part[1..];
-                        first = false;
-                    }
-                    System.Console.Write(part);
-                }
+                OnTokenReceived(item);
             }
         }
+
+        public event Action<string> OnTokenReceived;
     }
 }

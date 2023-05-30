@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="LlamaSharp" Version="0.3.0" />
-    <PackageReference Include="LlamaSharp.Backend.Cpu" Version="0.3.0" />
+    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.3.0" />
   </ItemGroup>
 
 </Project>
